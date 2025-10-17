@@ -1,0 +1,73 @@
+spring:
+  datasource:
+    # 数据源类型：指定为Druid
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 数据库连接信息（MySQL）
+    url: jdbc:mysql://39.108.141.227:3306/coze_chat_assistant?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ltb
+    password: ltb@2019  # 替换为实际密码
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    # Druid连接池专属配置（核心）
+    druid:
+      # 1. 基本连接池参数
+      initial-size: 5               # 初始化连接数（默认0）
+      max-active: 20                # 最大活跃连接数（默认8）
+      min-idle: 5                   # 最小空闲连接数（默认8）
+      max-wait: 60000               # 获取连接的最大等待时间（毫秒，默认-1表示无限等待）
+      time-between-eviction-runs-millis: 60000  # 间隔多久检测一次空闲连接（毫秒）
+      min-evictable-idle-time-millis: 300000    # 连接最小空闲时间（毫秒，300秒=5分钟）
+      validation-query: SELECT 1    # 验证连接有效性的SQL（MySQL用SELECT 1）
+      test-while-idle: true         # 空闲时验证连接有效性（推荐true）
+      test-on-borrow: false         # 借出连接时验证（影响性能，推荐false）
+      test-on-return: false         # 归还连接时验证（影响性能，推荐false）
+      pool-prepared-statements: true # 是否缓存PreparedStatement（PSCache）
+      max-pool-prepared-statement-per-connection-size: 20 # 每个连接的PSCache大小
+
+      # 2. 监控配置（StatFilter：SQL监控；WallFilter：防火墙）
+      filters: stat,wall,log4j2    # 启用的过滤器（stat=监控，wall=防SQL注入，log4j2=日志）
+      filter:
+        stat:
+          enabled: true             # 开启SQL监控
+          slow-sql-millis: 1000     # 慢SQL阈值（毫秒，超过则日志警告）
+          log-slow-sql: true        # 记录慢SQL
+        wall:
+          enabled: true             # 开启防火墙（防止SQL注入）
+          config:
+            multi-statement-allow: true # 允许批量执行SQL（按需开启）
+
+      # 3. 监控页面配置（StatViewServlet）
+      stat-view-servlet:
+        enabled: true               # 开启监控页面
+        url-pattern: /druid/*       # 监控页面访问路径（默认/druid/*）
+        login-username: admin       # 监控页面登录用户名
+        login-password: 123456      # 监控页面登录密码
+        allow: 127.0.0.1,192.168.1.0/24  # 允许访问的IP（默认所有IP）
+        deny: 192.168.1.100         # 禁止访问的IP（优先级高于allow）
+        reset-enable: false         # 是否允许重置监控数据（生产环境建议false）
+
+      # 4. Web关联监控配置（WebStatFilter：记录Web应用请求对应SQL）
+      web-stat-filter:
+        enabled: true               # 开启Web监控
+        url-pattern: /*             # 监控所有请求
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" # 排除静态资源和监控页面
+        session-stat-enable: true   # 开启Session监控
+        session-stat-max-count: 100 # 最多记录100个Session
+
+# MyBatis-Plus配置
+mybatis-plus:
+  # 实体类包别名（简化类型引用）
+  type-aliases-package: org.shiroko.ai.entity.domain
+  # Mapper XML文件位置（复杂SQL仍可写在XML中）
+  mapper-locations: classpath:mapper/*.xml
+  # 日志配置（打印SQL，开发环境用）
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true # 下划线转驼峰（如problem_record_content → problemRecordContent）
+  # 全局配置（可选）
+  global-config:
+    db-config:
+      # 主键生成策略（AUTO=数据库自增，ASSIGN_ID=雪花算法，根据表结构选择）
+      id-type: AUTO
+      # 表名前缀（如果表名有统一前缀，如t_user，可配置prefix: t_）
+      table-prefix:
