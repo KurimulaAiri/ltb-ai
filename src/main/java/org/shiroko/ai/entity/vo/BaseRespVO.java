@@ -7,14 +7,19 @@ import java.time.LocalDateTime;
 @Data
 public class BaseRespVO<T> {
 
+    // 是否成功
     private boolean success;
 
+    // 响应码
     private Integer code;
 
+    // 响应信息
     private String message;
 
+    // 响应时间
     private LocalDateTime timestamp;
 
+    // 响应数据
     private T data;
 
     /***

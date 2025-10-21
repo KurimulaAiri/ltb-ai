@@ -63,6 +63,13 @@
           <artifactId>spring-boot-starter-validation</artifactId>
       </dependency>
 
+      <!-- 引入Coze API依赖 -->
+      <dependency>
+          <groupId>com.coze</groupId>
+          <artifactId>coze-api</artifactId>
+          <version>LATEST</version>
+      </dependency>
+
 
   </dependencies>
 </project>

@@ -25,4 +25,5 @@ public class FieldsDTO {
     @NotNull(message = "用户ID不能为空")
     @JsonProperty("user_id")
     private Long userId;
+
 }

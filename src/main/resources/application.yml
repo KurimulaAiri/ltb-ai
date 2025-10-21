@@ -71,3 +71,18 @@ mybatis-plus:
       id-type: AUTO
       # 表名前缀（如果表名有统一前缀，如t_user，可配置prefix: t_）
       table-prefix:
+
+coze:
+  # API 基础域名（默认：api.coze.cn）
+  api-base: "https://api.coze.cn"
+  # JWT OAuth 配置
+  jwt-oauth:
+    client-id: "1144023316232"  # 替换为你的客户端ID
+    public-key-id: "BZErDsIZgxtoBrQrGKxHJkZRMhY-qxX5pkCXPGMrMBk"  # 替换为你的公钥ID
+#    private-key: |  # 私钥内容（多行配置，保留换行）
+#      -----BEGIN PRIVATE KEY-----
+#      MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCnNddlQkeVnoZl
+#      ...（你的私钥内容）...
+#      -----END PRIVATE KEY-----
+    # 可选：如果私钥保存在文件中，可配置文件路径（优先级低于直接配置的private-key）
+    private-key-file-path: "classpath:coze/private_key.pem"
