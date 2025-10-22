@@ -4,6 +4,6 @@ import org.shiroko.ai.entity.vo.BaseRespVO;
 
 public interface AuthService {
 
-    BaseRespVO<String> getAccessToken();
+    BaseRespVO<Object> getAccessToken(String sessionName);
 
 }

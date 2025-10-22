@@ -6,6 +6,9 @@ import org.shiroko.ai.util.CozeJWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -17,9 +20,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public BaseRespVO<String> getAccessToken() {
+    public BaseRespVO<Object> getAccessToken(String sessionName) {
         try {
-            return BaseRespVO.succeed("获取 access_token 成功", cozeJWTUtil.getAccessToken().getAccessToken());
+            Map<String, String> res = new HashMap<>();
+            res.put("access_token", cozeJWTUtil.getAccessToken(sessionName).getAccessToken());
+            res.put("session_name", sessionName);
+            return BaseRespVO.succeed("获取 access_token 成功", res);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

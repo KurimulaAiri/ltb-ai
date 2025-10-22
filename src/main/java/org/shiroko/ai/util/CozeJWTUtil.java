@@ -31,17 +31,17 @@ public class CozeJWTUtil {
         cozeConfig.validate();  // 触发配置校验，无效则启动失败
     }
 
-    // 获取 access_token 示例
-    public OAuthToken getAccessToken() throws Exception {
+    // 获取 access_token 使用 session_name
+    public OAuthToken getAccessToken(String sessionName) throws Exception {
         JWTOAuthClient oauth = new JWTOAuthClient.JWTOAuthBuilder()
-
+                .ttl(100) // 过期时间（秒）
                 .clientID(cozeConfig.getJwtOauth().getClientId())  // 客户端ID
                 .privateKey(cozeConfig.getJwtOauth().getPrivateKeyContent())  // 私钥内容
                 .publicKey(cozeConfig.getJwtOauth().getPublicKeyId())  // 公钥ID
                 .baseURL(cozeConfig.getApiBase())  // API域名
                 .build();
 
-        return oauth.getAccessToken();
+        return oauth.getAccessToken(sessionName);
     }
 
     // 初始化 Coze API 客户端
@@ -54,7 +54,12 @@ public class CozeJWTUtil {
                 .build();
 
         return new CozeAPI.Builder()
-                .auth(JWTOAuth.builder().jwtClient(oauth).build())
+                .auth (
+                        JWTOAuth
+                                .builder()
+                                .jwtClient(oauth)
+                                .build()
+                )
                 .baseURL(cozeConfig.getApiBase())
                 .build();
     }
