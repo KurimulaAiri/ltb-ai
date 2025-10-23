@@ -1,3 +1,6 @@
+server:
+  port: 25500
+
 spring:
   datasource:
     # 数据源类型：指定为Druid
@@ -86,3 +89,5 @@ coze:
 #      -----END PRIVATE KEY-----
     # 可选：如果私钥保存在文件中，可配置文件路径（优先级低于直接配置的private-key）
     private-key-file-path: "classpath:coze/private_key.pem"
+
+

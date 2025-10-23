@@ -10,8 +10,8 @@
     </parent>
 
   <groupId>org.shiroko</groupId>
-  <artifactId>ai-data-resolve</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <artifactId>ai</artifactId>
+  <version>0.0.1</version>
   <packaging>jar</packaging>
 
   <name>ai-data-resolve</name>
@@ -72,4 +72,15 @@
 
 
   </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
