@@ -2,15 +2,9 @@ server:
   port: 25500
 
 spring:
+  profiles:
+    active: @activated-environment@
   datasource:
-    # 数据源类型：指定为Druid
-    type: com.alibaba.druid.pool.DruidDataSource
-    # 数据库连接信息（MySQL）
-    url: jdbc:mysql://39.108.141.227:3306/coze_chat_assistant?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-    username: ltb
-    password: ltb@2019  # 替换为实际密码
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
     # Druid连接池专属配置（核心）
     druid:
       # 1. 基本连接池参数
@@ -56,6 +50,7 @@ spring:
         exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" # 排除静态资源和监控页面
         session-stat-enable: true   # 开启Session监控
         session-stat-max-count: 100 # 最多记录100个Session
+
 
 # MyBatis-Plus配置
 mybatis-plus:

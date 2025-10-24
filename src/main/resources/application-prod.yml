@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    # 数据源类型：指定为Druid
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/coze_chat_assistant?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 374dc59eee83b5a8  # 替换为实际密码
+    driver-class-name: com.mysql.cj.jdbc.Driver

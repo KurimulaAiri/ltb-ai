@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -9,72 +9,119 @@
         <relativePath/>
     </parent>
 
-  <groupId>org.shiroko</groupId>
-  <artifactId>ai</artifactId>
-  <version>0.0.1</version>
-  <packaging>jar</packaging>
+    <groupId>org.shiroko</groupId>
+    <artifactId>ai</artifactId>
+    <version>0.0.1</version>
+    <packaging>jar</packaging>
 
-  <name>ai-data-resolve</name>
-  <url>http://maven.apache.org</url>
+    <name>ai-data-resolve</name>
+    <url>http://maven.apache.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-  <dependencies>
-      <!-- Lombok（简化实体类代码） -->
-      <dependency>
-          <groupId>org.projectlombok</groupId>
-          <artifactId>lombok</artifactId>
-          <optional>true</optional>
-      </dependency>
+    <profiles>
+        <!-- 开发环境配置 -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <activated-environment>dev</activated-environment>
+            </properties>
+        </profile>
 
-      <!-- Spring MVC（RESTful API核心） -->
-      <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-web</artifactId>
-      </dependency>
+        <!-- 生产环境配置 -->
+        <profile>
+            <id>prod</id>
+            <properties>
+                <activated-environment>prod</activated-environment>
+            </properties>
+        </profile>
+    </profiles>
 
-      <!-- Druid连接池 Starter -->
-      <dependency>
-          <groupId>com.alibaba</groupId>
-          <artifactId>druid-spring-boot-starter</artifactId>
-          <version>1.2.27</version> <!-- 最新稳定版 -->
-      </dependency>
+    <dependencies>
+        <!-- Lombok（简化实体类代码） -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
 
-      <!-- 数据库驱动（已添加过可忽略，以MySQL为例） -->
-      <dependency>
-          <groupId>mysql</groupId>
-          <artifactId>mysql-connector-java</artifactId>
-          <scope>runtime</scope>
-          <version>8.0.33</version>
-      </dependency>
+        <!-- Spring MVC（RESTful API核心） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
-      <!-- 引入MyBatis-Plus Starter（包含MyBatis核心） -->
-      <dependency>
-          <groupId>com.baomidou</groupId>
-          <artifactId>mybatis-plus-boot-starter</artifactId>
-          <version>3.5.5</version> <!-- 最新稳定版 -->
-      </dependency>
+        <!-- Druid连接池 Starter -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.2.27</version> <!-- 最新稳定版 -->
+        </dependency>
 
-      <!-- 校验注解依赖（包含@NotBlank） -->
-      <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-validation</artifactId>
-      </dependency>
+        <!-- 数据库驱动（已添加过可忽略，以MySQL为例） -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+            <version>8.0.33</version>
+        </dependency>
 
-      <!-- 引入Coze API依赖 -->
-      <dependency>
-          <groupId>com.coze</groupId>
-          <artifactId>coze-api</artifactId>
-          <version>LATEST</version>
-      </dependency>
+        <!-- 引入MyBatis-Plus Starter（包含MyBatis核心） -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.5</version> <!-- 最新稳定版 -->
+        </dependency>
+
+        <!-- 校验注解依赖（包含@NotBlank） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- 引入Coze API依赖 -->
+        <dependency>
+            <groupId>com.coze</groupId>
+            <artifactId>coze-api</artifactId>
+            <version>LATEST</version>
+        </dependency>
 
 
-  </dependencies>
+    </dependencies>
 
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>application.yml</include>
+                    <include>application-${activated-environment}.yml</include>
+                </includes>
+            </resource>
+
+            <!-- 处理不需要过滤的其他所有文件 -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering> <!-- 关闭过滤 -->
+                <!-- 不设置includes/excludes，默认包含所有文件（除了上面已处理的） -->
+                <!-- 也可以显式包含所有文件，更清晰： -->
+                <excludes>
+                    <exclude>application.yml</exclude>
+                    <exclude>application-${activated-environment}.yml</exclude>
+                </excludes>
+                <includes>
+                    <include>mapper/**/*</include>
+                    <include>coze/**/*</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
