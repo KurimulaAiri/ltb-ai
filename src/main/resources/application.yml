@@ -57,7 +57,7 @@ mybatis-plus:
   # 实体类包别名（简化类型引用）
   type-aliases-package: org.shiroko.ai.entity.domain
   # Mapper XML文件位置（复杂SQL仍可写在XML中）
-  mapper-locations: classpath:mapper/*.xml
+  # mapper-locations: classpath:mapper/*.xml
   # 日志配置（打印SQL，开发环境用）
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

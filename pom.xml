@@ -117,7 +117,7 @@
                     <exclude>application-${activated-environment}.yml</exclude>
                 </excludes>
                 <includes>
-                    <include>mapper/**/*</include>
+                    <include>org/**/*</include>
                     <include>coze/**/*</include>
                 </includes>
             </resource>
