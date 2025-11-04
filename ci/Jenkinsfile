@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        jdk 'JAVA 21'  // 引用全局配置的JDK
+        jdk 'Java 21'  // 引用全局配置的JDK
         maven 'Maven 3.9'  // 引用全局配置的Maven
     }
 
