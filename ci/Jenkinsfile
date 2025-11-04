@@ -87,11 +87,15 @@ pipeline {
                         fi
                     """
 
+                    echo "当前jar包：${currentJar}，正在启动..."
+
                     // 4. 启动新应用（使用动态jar包名称）
                     sh """
                         nohup java -jar ${DEPLOY_DIR}/${currentJar} > ${DEPLOY_DIR}/app.log 2>&1 &
                         sleep 3
                     """
+
+                    echo "验证启动结果"
 
                     // 5. 验证启动结果
                     sh """
