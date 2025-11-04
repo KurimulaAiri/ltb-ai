@@ -95,6 +95,8 @@ pipeline {
 
                     echo "当前jar包：${currentJar}，正在启动..."
 
+                    def otherOpts = ">> ${DEPLOY_DIR}/app.log 2>&1 &"
+
                     // 4. 启动新应用（使用动态jar包名称）
                     sh """
                         # 1. 验证Java环境
@@ -106,7 +108,8 @@ pipeline {
                         echo "当前jar包：${currentJar}"
 
                         # 3. 执行启动命令（用单引号包裹，避免参数拆分）
-                        nohup java -jar ${DEPLOY_DIR}/${currentJar} ${JAVA_OPTS}>> ${DEPLOY_DIR}/app.log 2>&1 &
+
+                        nohup java -jar ${DEPLOY_DIR}/${currentJar} ${JAVA_OPTS} ${otherOpts}
 
                         # 4. 验证进程是否启动
                         sleep 3
