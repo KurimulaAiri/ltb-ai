@@ -109,6 +109,8 @@ pipeline {
 
                         # 3. 执行启动命令（用单引号包裹，避免参数拆分）
 
+                        echo "完整启动命令：nohup java -jar ${DEPLOY_DIR}/${currentJar} ${JAVA_OPTS} ${otherOpts}"
+
                         nohup java -jar ${DEPLOY_DIR}/${currentJar} ${JAVA_OPTS} ${otherOpts}
 
                         # 4. 验证进程是否启动
