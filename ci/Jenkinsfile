@@ -97,8 +97,19 @@ pipeline {
 
                     // 4. 启动新应用（使用动态jar包名称）
                     sh """
-                        java -version
-                        nohup java -jar ${DEPLOY_DIR}/${currentJar} >> ${DEPLOY_DIR}/app.log 2>&1 &
+                        # 1. 验证Java环境
+                        echo "Java环境验证："
+                        java -version || echo "Java环境异常！"
+
+                        # 2. 调试：打印变量和完整命令（关键排查用）
+                        echo "部署目录：${DEPLOY_DIR}"
+                        echo "当前jar包：${currentJar}"
+                        echo "完整启动命令：nohup java -jar ${DEPLOY_DIR}/${currentJar} >> ${DEPLOY_DIR}/app.log 2>&1 &"
+
+                        # 3. 执行启动命令（用单引号包裹，避免参数拆分）
+                        nohup 'java -jar ${DEPLOY_DIR}/${currentJar}' >> ${DEPLOY_DIR}/app.log 2>&1 &
+
+                        # 4. 验证进程是否启动
                         sleep 3
                     """
 
