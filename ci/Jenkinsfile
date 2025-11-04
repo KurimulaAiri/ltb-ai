@@ -1,0 +1,93 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'JDK11'  // 引用全局配置的JDK
+        maven 'Maven3'  // 引用全局配置的Maven
+    }
+
+    // 定义部署目录（同机部署的目标路径，需确保jenkins用户有权限）
+    environment {
+        DEPLOY_DIR = '/opt/java/ai'  // 应用部署目录
+        JAR_NAME = 'ai.jar'    // 构建后的jar包名称（需与项目pom.xml的artifactId一致）
+        JAVA_OPTS = "-Xms512m -Xmx1024m -XX:MaxMetaspaceSize=256m"  // JVM参数（根据实际情况调整）
+        LOG_FILE = "${DEPLOY_DIR}/app.log"  // 应用日志文件路径
+    }
+
+    stages {
+        // 阶段1：拉取代码（与跨机部署一致）
+        stage('拉取代码') {
+            steps {
+                checkout scm  // 拉取Git仓库代码（需提前配置Git凭证）
+            }
+        }
+
+        // 阶段2：构建打包（跳过测试可加-Dmaven.test.skip=true）
+        stage('构建打包') {
+            steps {
+                sh 'mvn clean package -Pprod -f pom.xml'
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: "target/${JAR_NAME}", fingerprint: true  // 归档jar包
+                }
+            }
+        }
+
+        // 阶段3：部署到本地（同机部署核心步骤）
+        stage('本地部署') {
+            steps {
+                script {
+                    // 1. 确保部署目录存在，若不存在则创建
+                    sh "mkdir -p ${DEPLOY_DIR}"
+
+                    // 2. 复制构建好的jar包到部署目录（覆盖旧包）
+                    sh "cp target/${JAR_NAME} ${DEPLOY_DIR}/"
+
+                    // 3. 停止旧应用进程（根据jar包名查找进程，避免误杀）
+                    sh """
+                        # 查找当前运行的应用进程ID（通过jar包名匹配）
+                        PID=\$(pgrep -f "${JAR_NAME}")
+                        if [ -n "\$PID" ]; then
+                            echo "停止旧进程：\$PID"
+                            kill -9 \$PID
+                            # 等待1秒确保进程已停止
+                            sleep 1
+                        else
+                            echo "无旧进程运行，直接启动新应用"
+                        fi
+                    """
+
+                    // 4. 启动新应用（后台运行，输出日志到指定文件）
+                    sh """
+                        echo "启动新应用：${DEPLOY_DIR}/${JAR_NAME}"
+                        nohup /www/server/java/jdk-21.0.2/bin/java $JAVA_OPTS -jar "${DEPLOY_DIR}/${JAR_NAME}" >> "$LOG_FILE" 2>&1 &
+                        # 等待3秒确保应用启动
+                        sleep 3
+                    """
+
+                    // 5. 验证应用是否启动成功（检查进程是否存在）
+                    sh """
+                        NEW_PID=\$(pgrep -f "${JAR_NAME}")
+                        if [ -n "\$NEW_PID" ]; then
+                            echo "应用启动成功，进程ID：\$NEW_PID"
+                        else
+                            echo "应用启动失败！查看日志：${LOG_FILE}"
+                            exit 1  # 部署失败，终止构建
+                        fi
+                    """
+                }
+            }
+        }
+    }
+
+    // 构建结果通知（可选）
+    post {
+        success {
+            echo "同机部署成功！应用路径：${DEPLOY_DIR}/${JAR_NAME}"
+        }
+        failure {
+            echo "部署失败！查看控制台输出或日志：${LOG_FILE}"
+        }
+    }
+}
