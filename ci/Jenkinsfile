@@ -79,13 +79,17 @@ pipeline {
                     // 3. 停止旧版本应用进程（通过jar包名前缀匹配）
                     sh """
                         echo '查找所有包含 ${oldJarPattern} 前缀的jar包进程'
-                        PID=\$(pgrep -f '${oldJarPattern}')
-                        if [ -n '\$PID' -o '\$PID' != ' ' ]; then
-                            echo '停止旧进程：\$PID'
+                        # 1. 获取PID（用ps+grep更兼容，避免pgrep的匹配问题）
+                        PID=\$(ps aux | grep -v grep | grep -E '${oldJarPattern}' | awk '{print \$2}')
+
+                        # 2. 正确判断PID是否非空（用双引号解析变量，-n判断非空）
+                        if [ -n "\$PID" ]; then
+                            echo "停止旧进程：\$PID"
+                            # 仅当PID非空时执行kill，避免错误
                             kill -9 \$PID
-                            sleep 1
+                            sleep 1  # 等待进程退出
                         else
-                            echo '无旧进程运行'
+                            echo "无旧进程运行"
                         fi
                     """
 
