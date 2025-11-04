@@ -5,7 +5,7 @@
 <mapper namespace="org.shiroko.ai.mapper.ProblemRecordMapper">
 
     <!-- 通用查询字段片段：替换为表的实际字段，避免重复编写 -->
-    <sql id="id">
+    <sql id="queryFields">
         id, problem_record_content, user_id, ai_response, create_time, update_time
         <!-- 提示：根据表结构删除/添加字段，如：
             id, name, phone, email, status, create_by, create_time, update_by, update_time

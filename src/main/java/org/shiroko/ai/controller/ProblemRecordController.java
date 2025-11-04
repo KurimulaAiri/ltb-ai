@@ -1,7 +1,9 @@
 package org.shiroko.ai.controller;
 
 import org.shiroko.ai.entity.dto.addProblemRecordReqDTO.AddProblemRecordReqDTO;
+import org.shiroko.ai.entity.dto.getProblemRecordReqDTO.GetProblemRecordReqDTO;
 import org.shiroko.ai.entity.vo.BaseRespVO;
+import org.shiroko.ai.entity.vo.QueryProblemRecordRespVO.QueryProblemRecordRespVO;
 import org.shiroko.ai.service.ProblemRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +32,12 @@ public class ProblemRecordController {
     public BaseRespVO<Object> addProblemRecord(@Valid @RequestBody AddProblemRecordReqDTO dto) {
 //        System.out.println("addProblemRecord, dto: " + dto);
         return this.problemRecordService.addProblemRecord(dto);
+    }
+
+    @RequestMapping("/get")
+    public BaseRespVO<QueryProblemRecordRespVO> getProblemRecord(@Valid @RequestBody GetProblemRecordReqDTO dto) {
+//        System.out.println("getProblemRecord, dto: " + dto);
+        return this.problemRecordService.getProblemRecord(dto);
     }
 
 }

@@ -1,6 +1,7 @@
 package org.shiroko.ai.entity.vo;
 
 import lombok.Data;
+import org.shiroko.ai.util.TimeConvertUtils;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +18,7 @@ public class BaseRespVO<T> {
     private String message;
 
     // 响应时间
-    private LocalDateTime timestamp;
+    private String timestamp;
 
     // 响应数据
     private T data;
@@ -42,7 +43,7 @@ public class BaseRespVO<T> {
         response.setCode(200);
         response.setMessage(message);
         response.setData(data);
-        response.setTimestamp(LocalDateTime.now());
+        response.setTimestamp(TimeConvertUtils.localDateTimeToString(LocalDateTime.now(), TimeConvertUtils.DEFAULT_DATETIME_FORMAT));
         return response;
     }
 
@@ -60,7 +61,7 @@ public class BaseRespVO<T> {
         response.setCode(code);
         response.setMessage(message);
         response.setData(data);
-        response.setTimestamp(LocalDateTime.now());
+        response.setTimestamp(TimeConvertUtils.localDateTimeToString(LocalDateTime.now(), TimeConvertUtils.DEFAULT_DATETIME_FORMAT));
         return response;
     }
 

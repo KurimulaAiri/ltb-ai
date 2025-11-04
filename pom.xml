@@ -91,6 +91,21 @@
             <version>LATEST</version>
         </dependency>
 
+        <!-- MapStruct依赖（用于VO和实体类转换） -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.5.Final</version>
+        </dependency>
+
+        <!-- MapStruct处理器依赖（编译时使用） -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.5.5.Final</version>
+            <scope>provided</scope>
+        </dependency>
+
 
     </dependencies>
 
