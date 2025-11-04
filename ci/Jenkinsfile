@@ -74,6 +74,8 @@ pipeline {
                     // 2. 复制新jar包到部署目录
                     sh "cp target/${currentJar} ${DEPLOY_DIR}/"
 
+                    echo "新jar包：${currentJar}，已复制到部署目录，停止旧进程"
+
                     // 3. 停止旧版本应用进程（通过jar包名前缀匹配）
                     sh """
                         # 查找所有包含${env.ARTIFACT_ID}前缀的jar包进程
