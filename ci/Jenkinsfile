@@ -50,7 +50,7 @@ pipeline {
             }
             post {
                 success {
-                    archiveArtifacts artifacts: "target/${JAR_NAME}", fingerprint: true  // 归档jar包
+                    archiveArtifacts artifacts: "target/${ARTIFACT_ID}-${VERSION}.jar", fingerprint: true  // 归档jar包
                 }
             }
         }
@@ -63,12 +63,12 @@ pipeline {
                     sh "mkdir -p ${DEPLOY_DIR}"
 
                     // 2. 复制构建好的jar包到部署目录（覆盖旧包）
-                    sh "cp target/${JAR_NAME} ${DEPLOY_DIR}/"
+                    sh "cp target/${ARTIFACT_ID}-${VERSION}.jar ${DEPLOY_DIR}/"
 
                     // 3. 停止旧应用进程（根据jar包名查找进程，避免误杀）
                     sh """
                         # 查找当前运行的应用进程ID（通过jar包名匹配）
-                        PID=\$(pgrep -f "${JAR_NAME}")
+                        PID=\$(pgrep -f "${ARTIFACT_ID}-${VERSION}.jar")
                         if [ -n "\$PID" ]; then
                             echo "停止旧进程：\$PID"
                             kill -9 \$PID
@@ -81,15 +81,15 @@ pipeline {
 
                     // 4. 启动新应用（后台运行，输出日志到指定文件）
                     sh """
-                        echo "启动新应用：${DEPLOY_DIR}/${JAR_NAME}"
-                        nohup /www/server/java/jdk-21.0.2/bin/java $JAVA_OPTS -jar "${DEPLOY_DIR}/${JAR_NAME}" >> "$LOG_FILE" 2>&1 &
+                        echo "启动新应用：${DEPLOY_DIR}/${ARTIFACT_ID}-${VERSION}.jar"
+                        nohup /www/server/java/jdk-21.0.2/bin/java $JAVA_OPTS -jar "${DEPLOY_DIR}/${ARTIFACT_ID}-${VERSION}.jar" >> "$LOG_FILE" 2>&1 &
                         # 等待3秒确保应用启动
                         sleep 3
                     """
 
                     // 5. 验证应用是否启动成功（检查进程是否存在）
                     sh """
-                        NEW_PID=\$(pgrep -f "${JAR_NAME}")
+                        NEW_PID=\$(pgrep -f "${ARTIFACT_ID}-${VERSION}.jar")
                         if [ -n "\$NEW_PID" ]; then
                             echo "应用启动成功，进程ID：\$NEW_PID"
                         else
@@ -105,7 +105,7 @@ pipeline {
     // 构建结果通知（可选）
     post {
         success {
-            echo "同机部署成功！应用路径：${DEPLOY_DIR}/${JAR_NAME}"
+            echo "同机部署成功！应用路径：${DEPLOY_DIR}/${ARTIFACT_ID}-${VERSION}.jar"
         }
         failure {
             echo "部署失败！查看控制台输出或日志：${LOG_FILE}"
