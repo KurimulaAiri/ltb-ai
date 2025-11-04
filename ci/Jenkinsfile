@@ -12,8 +12,6 @@ pipeline {
         JAR_NAME = "${ARTIFACT_ID}-${VERSION}.jar"    // 构建后的jar包名称（需与项目pom.xml的artifactId一致）
         JAVA_OPTS = "-Xms512m -Xmx1024m -XX:MaxMetaspaceSize=256m"  // JVM参数（根据实际情况调整）
         LOG_FILE = "${DEPLOY_DIR}/app.log"  // 应用日志文件路径
-        ARTIFACT_ID = ''  // 项目的artifactId（从pom.xml中提取）
-        VERSION = ''  // 项目的version（从pom.xml中提取）
     }
 
     stages {
@@ -44,7 +42,7 @@ pipeline {
                     env.ARTIFACT_ID = artifactId
                     env.VERSION = version
 
-                    echo "提取到项目信息：artifactId=${ARTIFACT_ID}，version=${VERSION}，jar包名称=${ARTIFACT_ID}-${VERSION}.jar"
+                    echo "提取到项目信息：artifactId=${env.ARTIFACT_ID}，version=${env.VERSION}，jar包名称=${env.ARTIFACT_ID}-${env.VERSION}.jar"
                 }
             }
         }
@@ -56,7 +54,7 @@ pipeline {
             }
             post {
                 success {
-                    archiveArtifacts artifacts: "target/${ARTIFACT_ID}-${VERSION}.jar", fingerprint: true  // 归档jar包
+                    archiveArtifacts artifacts: "target/${env.ARTIFACT_ID}-${env.VERSION}.jar", fingerprint: true  // 归档jar包
                 }
             }
         }
@@ -66,9 +64,9 @@ pipeline {
             steps {
                 script {
                     // 动态jar包名称（当前构建的版本）
-                    def currentJar = "${ARTIFACT_ID}-${VERSION}.jar"
+                    def currentJar = "${env.ARTIFACT_ID}-${env.VERSION}.jar"
                     // 旧jar包的通配符（匹配同一项目的所有版本，用于停止旧进程）
-                    def oldJarPattern = "${ARTIFACT_ID}-*.jar"
+                    def oldJarPattern = "${env.ARTIFACT_ID}-*.jar"
 
                     // 1. 创建部署目录
                     sh "mkdir -p ${DEPLOY_DIR}"
@@ -78,7 +76,7 @@ pipeline {
 
                     // 3. 停止旧版本应用进程（通过jar包名前缀匹配）
                     sh """
-                        # 查找所有包含${ARTIFACT_ID}前缀的jar包进程
+                        # 查找所有包含${env.ARTIFACT_ID}前缀的jar包进程
                         PID=\$(pgrep -f "${oldJarPattern}")
                         if [ -n "\$PID" ]; then
                             echo "停止旧进程：\$PID"
@@ -113,7 +111,7 @@ pipeline {
     // 构建结果通知（可选）
     post {
         success {
-            echo "同机部署成功！应用路径：${DEPLOY_DIR}/${ARTIFACT_ID}-${VERSION}.jar"
+            echo "同机部署成功！应用路径：${DEPLOY_DIR}/${env.ARTIFACT_ID}-${env.VERSION}.jar"
         }
         failure {
             echo "部署失败！查看控制台输出或日志：${LOG_FILE}"
