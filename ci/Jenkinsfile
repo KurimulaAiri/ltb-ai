@@ -12,6 +12,8 @@ pipeline {
         JAR_NAME = "${ARTIFACT_ID}-${VERSION}.jar"    // 构建后的jar包名称（需与项目pom.xml的artifactId一致）
         JAVA_OPTS = "-Xms512m -Xmx1024m -XX:MaxMetaspaceSize=256m"  // JVM参数（根据实际情况调整）
         LOG_FILE = "${DEPLOY_DIR}/app.log"  // 应用日志文件路径
+        ARTIFACT_ID = ''  // 项目的artifactId（从pom.xml中提取）
+        VERSION = ''  // 项目的version（从pom.xml中提取）
     }
 
     stages {
