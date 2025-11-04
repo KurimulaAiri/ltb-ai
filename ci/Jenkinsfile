@@ -9,7 +9,7 @@ pipeline {
     // 定义部署目录（同机部署的目标路径，需确保jenkins用户有权限）
     environment {
         DEPLOY_DIR = '/opt/java/ai'  // 应用部署目录
-        JAR_NAME = 'ai.jar'    // 构建后的jar包名称（需与项目pom.xml的artifactId一致）
+        JAR_NAME = "${ARTIFACT_ID}-${VERSION}.jar"    // 构建后的jar包名称（需与项目pom.xml的artifactId一致）
         JAVA_OPTS = "-Xms512m -Xmx1024m -XX:MaxMetaspaceSize=256m"  // JVM参数（根据实际情况调整）
         LOG_FILE = "${DEPLOY_DIR}/app.log"  // 应用日志文件路径
     }
@@ -19,6 +19,27 @@ pipeline {
         stage('拉取代码') {
             steps {
                 checkout scm  // 拉取Git仓库代码（需提前配置Git凭证）
+            }
+        }
+
+        // 新增阶段：提取pom.xml中的artifactId和version
+        stage('提取版本信息') {
+            steps {
+                script {
+                    // 提取artifactId（从pom.xml中）
+                    ARTIFACT_ID = sh(
+                        script: 'mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout',
+                        returnStdout: true
+                    ).trim()  // 去除换行符和空格
+
+                    // 提取version（从pom.xml中）
+                    VERSION = sh(
+                        script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout',
+                        returnStdout: true
+                    ).trim()
+
+                    echo "提取到项目信息：artifactId=${ARTIFACT_ID}，version=${VERSION}，jar包名称=${ARTIFACT_ID}-${VERSION}.jar"
+                }
             }
         }
 
