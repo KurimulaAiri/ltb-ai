@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        jdk 'JDK11'  // 引用全局配置的JDK
-        maven 'Maven3'  // 引用全局配置的Maven
+        jdk 'JDK 21'  // 引用全局配置的JDK
+        maven 'Maven 3.9'  // 引用全局配置的Maven
     }
 
     // 定义部署目录（同机部署的目标路径，需确保jenkins用户有权限）
