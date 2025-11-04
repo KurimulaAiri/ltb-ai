@@ -29,13 +29,13 @@ pipeline {
             steps {
                 script {
                     // 提取artifactId（从pom.xml中）
-                    ARTIFACT_ID = sh(
+                    env.ARTIFACT_ID = sh(
                         script: 'mvn help:evaluate -Dexpression="project.artifactId" -q -DforceStdout',
                         returnStdout: true
                     ).trim()  // 去除换行符和空格
 
                     // 提取version（从pom.xml中）
-                    VERSION = sh(
+                    env.VERSION = sh(
                         script: 'mvn help:evaluate -Dexpression="project.version" -q -DforceStdout',
                         returnStdout: true
                     ).trim()
