@@ -91,6 +91,7 @@ pipeline {
 
                     // 4. 启动新应用（使用动态jar包名称）
                     sh """
+                        java -version
                         nohup java -jar ${DEPLOY_DIR}/${currentJar} > ${DEPLOY_DIR}/app.log 2>&1 &
                         sleep 3
                     """
