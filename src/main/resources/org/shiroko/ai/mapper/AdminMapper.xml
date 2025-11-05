@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 关联Mapper接口全类名（生成时自动填充） -->
+<mapper namespace="org.shiroko.ai.mapper.AdminMapper">
+
+    <sql id="queryFields">
+        id, admin_account, admin_password, admin_nickname, create_time, update_time
+    </sql>
+
+    <select id="login" resultType="org.shiroko.ai.entity.domain.AdminDO">
+        select <include refid="queryFields"/>
+        from admin
+        where admin_account = #{adminAccount}
+          and admin_password = #{adminPassword}
+    </select>
+
+</mapper>

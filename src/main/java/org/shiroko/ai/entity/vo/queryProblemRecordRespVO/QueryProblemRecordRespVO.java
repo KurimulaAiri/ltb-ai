@@ -1,4 +1,4 @@
-package org.shiroko.ai.entity.vo.QueryProblemRecordRespVO;
+package org.shiroko.ai.entity.vo.queryProblemRecordRespVO;
 
 import lombok.Data;
 
