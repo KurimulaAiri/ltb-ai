@@ -67,7 +67,7 @@ pipeline {
                     // 动态jar包名称（当前构建的版本）
                     def currentJar = "${env.ARTIFACT_ID}-${env.VERSION}.jar"
                     // 旧jar包的通配符（匹配同一项目的所有版本，用于停止旧进程）
-                    def oldJarPattern = "${env.ARTIFACT_ID}-*.jar"
+                    def oldJarPattern = "${env.ARTIFACT_ID}-.*.jar"
 
                     // 1. 创建部署目录
                     sh "mkdir -p ${DEPLOY_DIR}"
