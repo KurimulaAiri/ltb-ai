@@ -85,4 +85,8 @@ coze:
     # 可选：如果私钥保存在文件中，可配置文件路径（优先级低于直接配置的private-key）
     private-key-file-path: "classpath:coze/private_key.pem"
 
-
+jwt:
+  secret: "your-256-bit-secret-key-which-should-be-very-long-and-secure-12345678"
+  expiration: 10000  # 过期时间
+  header: "Authorization"  # 请求头中Token的键名（默认：Authorization）
+  prefix: "Bearer "  # Token前缀（默认：Bearer ）

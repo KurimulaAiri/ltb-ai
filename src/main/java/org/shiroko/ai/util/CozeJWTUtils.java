@@ -14,14 +14,14 @@ import javax.annotation.PostConstruct;
  * Coze JWT 工具类（依赖配置文件中的常量）
  */
 @Component  // 交给 Spring 管理，支持依赖注入
-public class CozeJWTUtil {
+public class CozeJWTUtils {
 
     // 注入配置类
     private final CozeConfig cozeConfig;
 
     // 构造器注入（推荐）
     @Autowired
-    public CozeJWTUtil(CozeConfig cozeConfig) {
+    public CozeJWTUtils(CozeConfig cozeConfig) {
         this.cozeConfig = cozeConfig;
     }
 

@@ -11,4 +11,6 @@ public class LoginAdminRespDTO {
 
      private String updateTimeStr;
 
+     private String token;
+
 }

@@ -6,6 +6,7 @@ import org.shiroko.ai.entity.vo.BaseRespVO;
 import org.shiroko.ai.entity.vo.loginAdminRespDTO.LoginAdminRespDTO;
 import org.shiroko.ai.mapper.AdminMapper;
 import org.shiroko.ai.service.AdminService;
+import org.shiroko.ai.util.JwtUtils;
 import org.shiroko.ai.util.TimeConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminServiceImpl implements AdminService {
 
+    private final JwtUtils jwtUtils;
     private final AdminMapper adminMapper;
 
     @Autowired
-    public AdminServiceImpl(AdminMapper adminMapper) {
+    public AdminServiceImpl(JwtUtils jwtUtils, AdminMapper adminMapper) {
+        this.jwtUtils = jwtUtils;
         this.adminMapper = adminMapper;
     }
 
@@ -30,6 +33,7 @@ public class AdminServiceImpl implements AdminService {
         respDTO.setId(admin.getId());
         respDTO.setNickname(admin.getAdminNickname());
         respDTO.setUpdateTimeStr(TimeConvertUtils.localDateTimeToString(admin.getUpdateTime()));
+        respDTO.setToken(jwtUtils.generateToken(admin.getAdminAccount()));
         return BaseRespVO.succeed("登录成功", respDTO);
     }
 }
