@@ -30,6 +30,7 @@ pipeline {
             steps {
                 script {
                     // 提取artifactId（从pom.xml中）
+                    echo "当前时间：${CURRENT_DATE}"
 
                     def artifactId = sh(
                         script: 'mvn help:evaluate -Dexpression="project.artifactId" -q -DforceStdout',
