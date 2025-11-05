@@ -99,7 +99,7 @@ pipeline {
 
                     echo "当前jar包：${currentJar}，正在启动..."
 
-                    def otherOpts = ">> ${DEPLOY_DIR}/app.log 2>&1 &"
+                    def otherOpts = ">> ${LOG_FILE} 2>&1 &"
 
                     withEnv(["JENKINS_NODE_COOKIE=dontkillme"]) {
                         // 4. 启动新应用（使用动态jar包名称）
