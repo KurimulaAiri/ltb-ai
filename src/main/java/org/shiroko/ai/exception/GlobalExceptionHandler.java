@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     // 处理请求体解析失败（如JSON格式错误）
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public BaseRespVO<String> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
-        String errorMsg = "请求体格式错误：";
+        String errorMsg = "请求体格式错误";
         return BaseRespVO.failed(400, errorMsg, e.getLocalizedMessage());
     }
 
