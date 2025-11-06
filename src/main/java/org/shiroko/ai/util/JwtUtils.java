@@ -43,7 +43,7 @@ public class JwtUtils {
                 .setClaims(claims) // 设置自定义载荷
                 .setSubject(account) // 设置主题（通常是用户名/用户ID）
                 .setIssuedAt(new Date()) // 签发时间
-                .setExpiration(new Date(System.currentTimeMillis() + expiration)) // 过期时间
+                .setExpiration(new Date(System.currentTimeMillis() + (expiration * 1000 * 60 * 20))) // 过期时间 20 分钟
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256) // 签名（使用密钥和算法）
                 .compact(); // 生成 Token 字符串
     }

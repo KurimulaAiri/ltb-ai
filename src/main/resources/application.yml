@@ -87,6 +87,6 @@ coze:
 
 jwt:
   secret: "your-256-bit-secret-key-which-should-be-very-long-and-secure-12345678"
-  expiration: 10000  # 过期时间
+  expiration: 1000  # 过期时间
   header: "Authorization"  # 请求头中Token的键名（默认：Authorization）
   prefix: "Bearer "  # Token前缀（默认：Bearer ）
