@@ -39,7 +39,7 @@ public class AdminController {
         // 用私钥解密
         PrivateKey privateKey = keyPair.getPrivate();
         try {
-            Cipher cipher = Cipher.getInstance("RSA/OAEP");
+            Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
             byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedPwd));
             String plainPassword = new String(decryptedBytes); // 解密后的明文密码
