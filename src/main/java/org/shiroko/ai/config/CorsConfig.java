@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 对所有接口生效（/**表示匹配所有路径）
-//                .allowedOrigins("http://localhost:8081/", "http://localhost:25502/") // 允许的源（多个用逗号分隔）
+                .allowedOrigins("http://localhost:8081/", "http://localhost:25502/") // 允许的源（多个用逗号分隔）
                 .allowedOriginPatterns("https://*.kuaidimao.com/", "https://*.wyhlife.com/", "http://localhost:25502/") // 允许的源（多个用逗号分隔，支持通配符）
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 允许的方法（包括预检请求OPTIONS）
                 .allowedHeaders("Authorization", "Content-Type") // 允许的请求头
