@@ -37,6 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(tokenInterceptor()) // 添加拦截器
                 .addPathPatterns("/**")  // 拦截所有请求
                 .excludePathPatterns("/admin/login")  // 排除登录接口（无需鉴权）
+                .excludePathPatterns("/admin/getPublicKey")  // 排除获取公钥接口（无需鉴权）
                 .excludePathPatterns("/register");  // 排除注册接口（按需添加）
     }
 
