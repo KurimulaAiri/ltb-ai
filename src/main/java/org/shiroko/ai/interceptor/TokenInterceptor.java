@@ -32,6 +32,11 @@ public class TokenInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true;  // 预检请求直接放行
+        }
+
         // 1. 从请求头中获取Token
         String token = request.getHeader(tokenHeader);
 
