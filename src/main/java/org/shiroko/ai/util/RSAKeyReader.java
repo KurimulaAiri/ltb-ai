@@ -1,5 +1,6 @@
 package org.shiroko.ai.util;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -18,6 +19,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 @Component
+@Data
 public class RSAKeyReader {
 
     // 注入资源加载器（用于读取classpath下的文件，开发环境方便）
@@ -26,6 +28,9 @@ public class RSAKeyReader {
     // 密钥文件路径（建议从配置文件读取，灵活适配环境）
     private final String publicKeyPath;  // 如："classpath:rsa/rsa_public.pem" 或 "/opt/keys/rsa_public.pem"
     private final String privateKeyPath; // 如："classpath:rsa/rsa_private.pem" 或 "/opt/keys/rsa_private.pem"
+
+    private String publicKeyContent; // 公钥内容
+    private String privateKeyContent; // 私钥内容
 
     // 构造函数：从配置文件注入路径（通过@ConfigurationProperties或@Value）
     public RSAKeyReader(ResourceLoader resourceLoader,
@@ -51,6 +56,9 @@ public class RSAKeyReader {
         // 3. Base64解码
         byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyStr);
 
+        // 3. 缓存公钥内容
+        publicKeyContent = publicKeyStr;
+
         // 4. 生成PublicKey对象
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         return keyFactory.generatePublic(new X509EncodedKeySpec(publicKeyBytes));
@@ -70,6 +78,9 @@ public class RSAKeyReader {
 
         // 3. Base64解码
         byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyStr);
+
+        // 3. 缓存私钥内容
+        privateKeyContent = privateKeyStr;
 
         // 4. 生成PrivateKey对象（注意私钥用PKCS8规范）
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");

@@ -17,12 +17,15 @@ import java.security.KeyPair;
 @RequestMapping("/admin")
 public class AdminController {
 
+    private final RSAKeyReader rsaKeyReader;
+
     private final KeyPair keyPair;
 
     private final AdminService adminService;
     @Autowired
     public AdminController(AdminService adminService, RSAKeyReader rsaKeyReader) throws Exception {
         this.adminService = adminService;
+        this.rsaKeyReader = rsaKeyReader;
         this.keyPair = rsaKeyReader.getKeyPair();
     }
 
@@ -33,7 +36,7 @@ public class AdminController {
 
     @RequestMapping("/getPublicKey")
     public BaseRespVO<String> getPublicKey() {
-        return BaseRespVO.succeed("public_key", keyPair.getPublic().toString());
+        return BaseRespVO.succeed("public_key", rsaKeyReader.getPublicKeyContent());
     }
 
 }
