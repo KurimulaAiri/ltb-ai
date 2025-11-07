@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.crypto.Cipher;
 import javax.validation.Valid;
 import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.util.Base64;
 
 @RestController
 @RequestMapping("/admin")
@@ -31,6 +34,19 @@ public class AdminController {
 
     @RequestMapping("/login")
     public BaseRespVO<LoginAdminRespDTO> login(@Valid @RequestBody LoginAdminReqDTO dto) {
+
+        String encryptedPwd = dto.getPassword();
+        // 用私钥解密
+        PrivateKey privateKey = keyPair.getPrivate();
+        try {
+            Cipher cipher = Cipher.getInstance("RSA/OAEP");
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedPwd));
+            String plainPassword = new String(decryptedBytes); // 解密后的明文密码
+            dto.setPassword(plainPassword);
+        } catch (Exception e) {
+            return BaseRespVO.failed(500,"服务器出错");
+        }
         return adminService.login(dto);
     }
 
