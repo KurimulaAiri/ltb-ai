@@ -9,7 +9,7 @@ pipeline {
     // 定义部署目录（同机部署的目标路径，需确保jenkins用户有权限）
     environment {
         // 定义日期变量：格式为 yyyy-MM-dd-HH-mm（根据需求调整）
-        CURRENT_DATE = sh(script: 'date +%Y-%m-%d-%H-%M', returnStdout: true).trim()
+        CURRENT_DATE = sh(script: 'date +%Y-%m-%d:%H:%M', returnStdout: true).trim()
         DEPLOY_DIR = '/opt/java/ai'  // 应用部署目录
         JAR_NAME = "${ARTIFACT_ID}-${VERSION}.jar"    // 构建后的jar包名称（需与项目pom.xml的artifactId一致）
         JAVA_OPTS = "-Xms512m -Xmx1024m -XX:MaxMetaspaceSize=256m"  // JVM参数（根据实际情况调整）
