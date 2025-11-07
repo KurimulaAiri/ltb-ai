@@ -1,6 +1,10 @@
 server:
   port: 25500
 
+rsa:
+  public-key: "classpath:secret/trans_public_key.pem"
+  private-key: "classpath:secret/trans_private_key.pem"
+
 spring:
   profiles:
     active: @activated-environment@
@@ -83,7 +87,7 @@ coze:
 #      ...（你的私钥内容）...
 #      -----END PRIVATE KEY-----
     # 可选：如果私钥保存在文件中，可配置文件路径（优先级低于直接配置的private-key）
-    private-key-file-path: "classpath:coze/private_key.pem"
+    private-key-file-path: "classpath:coze/coze_private_key.pem"
 
 jwt:
   secret: "your-256-bit-secret-key-which-should-be-very-long-and-secure-12345678"
