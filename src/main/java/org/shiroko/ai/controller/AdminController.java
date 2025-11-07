@@ -38,6 +38,8 @@ public class AdminController {
     @RequestMapping("/login")
     public BaseRespVO<LoginAdminRespDTO> login(@Valid @RequestBody LoginAdminReqDTO dto) {
 
+        System.out.println(dto);
+
         String encryptedPwd = dto.getPassword();
         // 用私钥解密
         PrivateKey privateKey = keyPair.getPrivate();
@@ -51,7 +53,6 @@ public class AdminController {
                     new MGF1ParameterSpec("SHA-256"), // MGF1 的哈希算法：与前端 mgf1.md 匹配
                     PSource.PSpecified.DEFAULT       // 可选参数，默认即可
             );
-
             cipher.init(Cipher.DECRYPT_MODE, privateKey, oaepParams);
             byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedPwd));
             String plainPassword = new String(decryptedBytes); // 解密后的明文密码
