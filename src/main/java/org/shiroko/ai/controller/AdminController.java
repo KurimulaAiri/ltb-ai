@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.security.KeyPair;
 
@@ -18,14 +17,11 @@ import java.security.KeyPair;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Resource
-    private RSAKeyReader rsaKeyReader;
-
     private final KeyPair keyPair;
 
     private final AdminService adminService;
     @Autowired
-    public AdminController(AdminService adminService) throws Exception {
+    public AdminController(AdminService adminService, RSAKeyReader rsaKeyReader) throws Exception {
         this.adminService = adminService;
         this.keyPair = rsaKeyReader.getKeyPair();
     }
