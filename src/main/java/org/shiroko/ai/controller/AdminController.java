@@ -45,6 +45,7 @@ public class AdminController {
             String plainPassword = new String(decryptedBytes); // 解密后的明文密码
             dto.setPassword(plainPassword);
         } catch (Exception e) {
+            e.printStackTrace();
             return BaseRespVO.failed(500,"服务器出错");
         }
         return adminService.login(dto);
