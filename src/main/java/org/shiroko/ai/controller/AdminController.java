@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.OAEPParameterSpec;
+import javax.crypto.spec.PSource;
 import javax.validation.Valid;
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.spec.MGF1ParameterSpec;
 import java.util.Base64;
 
 @RestController
@@ -40,7 +43,16 @@ public class AdminController {
         PrivateKey privateKey = keyPair.getPrivate();
         try {
             Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
-            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+            // 2. 显式配置 OAEP 参数（与前端 oaepOptions 完全一致）
+            OAEPParameterSpec oaepParams = new OAEPParameterSpec(
+                    "SHA-256", // 哈希算法：与前端 forge.md.sha256 匹配
+                    "MGF1",    // 掩码生成函数：固定为 MGF1
+                    new MGF1ParameterSpec("SHA-256"), // MGF1 的哈希算法：与前端 mgf1.md 匹配
+                    PSource.PSpecified.DEFAULT       // 可选参数，默认即可
+            );
+
+            cipher.init(Cipher.DECRYPT_MODE, privateKey, oaepParams);
             byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedPwd));
             String plainPassword = new String(decryptedBytes); // 解密后的明文密码
             dto.setPassword(plainPassword);
