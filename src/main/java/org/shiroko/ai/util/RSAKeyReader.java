@@ -48,6 +48,9 @@ public class RSAKeyReader {
         // 1. 读取文件内容（支持classpath或绝对路径）
         String publicKeyPem = readKeyFile(publicKeyPath);
 
+        // 3. 缓存公钥内容
+        publicKeyContent = publicKeyPem;
+
         // 2. 清洗格式：去除BEGIN/END标识和换行符
         String publicKeyStr = publicKeyPem.replace("-----BEGIN PUBLIC KEY-----", "")
                 .replace("-----END PUBLIC KEY-----", "")
@@ -56,8 +59,7 @@ public class RSAKeyReader {
         // 3. Base64解码
         byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyStr);
 
-        // 3. 缓存公钥内容
-        publicKeyContent = publicKeyStr;
+
 
         // 4. 生成PublicKey对象
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
@@ -70,6 +72,8 @@ public class RSAKeyReader {
     public PrivateKey readPrivateKey() throws Exception {
         // 1. 读取文件内容
         String privateKeyPem = readKeyFile(privateKeyPath);
+        // 3. 缓存私钥内容
+        privateKeyContent = privateKeyPem;
 
         // 2. 清洗格式：去除BEGIN/END标识和换行符
         String privateKeyStr = privateKeyPem.replace("-----BEGIN PRIVATE KEY-----", "")
@@ -78,9 +82,6 @@ public class RSAKeyReader {
 
         // 3. Base64解码
         byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyStr);
-
-        // 3. 缓存私钥内容
-        privateKeyContent = privateKeyStr;
 
         // 4. 生成PrivateKey对象（注意私钥用PKCS8规范）
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
