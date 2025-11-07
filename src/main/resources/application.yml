@@ -2,8 +2,10 @@ server:
   port: 25500
 
 rsa:
-  public-key: "classpath:secret/trans_public_key.pem"
-  private-key: "classpath:secret/trans_private_key.pem"
+  public-key-path: "classpath:secret/trans_public_key.pem"
+  private-key-path: "classpath:secret/trans_private_key.pem"
+
+
 
 spring:
   profiles:
