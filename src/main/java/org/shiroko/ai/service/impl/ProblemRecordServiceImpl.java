@@ -50,8 +50,11 @@ public class ProblemRecordServiceImpl implements ProblemRecordService {
         if (dto.getAiResponse() != null) {
             queryWrapper.like("ai_response", dto.getAiResponse());
         }
-        if (dto.getTimeGap() != null && dto.getTimeGap().length == 2) {
-            queryWrapper.between("create_time", dto.getTimeGap()[0], dto.getTimeGap()[1]);
+        if (dto.getCreateTimeGap() != null && dto.getCreateTimeGap().length == 2) {
+            queryWrapper.between("create_time", dto.getCreateTimeGap()[0], dto.getCreateTimeGap()[1]);
+        }
+        if (dto.getUpdateTimeGap() != null && dto.getUpdateTimeGap().length == 2) {
+            queryWrapper.between("update_time", dto.getUpdateTimeGap()[0], dto.getUpdateTimeGap()[1]);
         }
         queryWrapper.orderByDesc("id");
 

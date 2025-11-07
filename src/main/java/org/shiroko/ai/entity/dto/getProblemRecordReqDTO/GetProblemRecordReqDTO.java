@@ -16,7 +16,9 @@ public class GetProblemRecordReqDTO {
 
     private String ProblemRecordContent;
 
-    private LocalDateTime[] timeGap;
+    private LocalDateTime[] createTimeGap;
+
+    private LocalDateTime[] updateTimeGap;
 
     @NotNull(message = "pageNum不能为空")
     private Integer pageNum;
