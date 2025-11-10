@@ -38,7 +38,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")  // 拦截所有请求
                 .excludePathPatterns("/admin/login")  // 排除登录接口（无需鉴权）
                 .excludePathPatterns("/admin/getPublicKey")  // 排除获取公钥接口（无需鉴权）
-                .addPathPatterns("/auth/**")  // 拦截所有 /admin/** 路径
+                .excludePathPatterns("/auth/**")  // 拦截所有 /admin/** 路径
                 .excludePathPatterns("/register");  // 排除注册接口（按需添加）
     }
 
