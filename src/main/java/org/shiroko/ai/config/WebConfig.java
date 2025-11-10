@@ -39,6 +39,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/admin/login")  // 排除登录接口（无需鉴权）
                 .excludePathPatterns("/admin/getPublicKey")  // 排除获取公钥接口（无需鉴权）
                 .excludePathPatterns("/auth/get_access_token")  // 排除所有 /auth/** 路径
+                .excludePathPatterns("/problem_record/add")
                 .excludePathPatterns("/register");  // 排除注册接口（按需添加）
     }
 
